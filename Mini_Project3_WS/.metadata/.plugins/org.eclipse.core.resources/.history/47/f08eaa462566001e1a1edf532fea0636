@@ -1,0 +1,23 @@
+/*
+ * adc.h
+ *
+ *  Created on: Oct 6, 2023
+ *      Author: Youssif Hossam
+ */
+
+#ifndef MCAL_ADC_ADC_H_
+#define MCAL_ADC_ADC_H_
+
+#include "../../LIB/std_types.h"
+
+#define ADC_MAXIMUM_VALUE    1023
+#define ADC_REF_VOLT_VALUE   5
+
+extern volatile uint16 g_adcResult;
+
+void ADC_init(void);
+
+void ADC_readChannel(uint8 ch_num);
+
+
+#endif /* MCAL_ADC_ADC_H_ */

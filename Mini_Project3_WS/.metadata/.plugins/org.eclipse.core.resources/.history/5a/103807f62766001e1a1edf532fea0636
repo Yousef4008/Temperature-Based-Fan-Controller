@@ -1,0 +1,32 @@
+/*
+ * adc.c
+ *
+ *  Created on: Oct 6, 2023
+ *      Author: Youssif Hossam
+ */
+
+#include "adc.h"
+#include "../../LIB/common_macros.h" /* To use the macros like SET_BIT */
+#include <avr/io.h> /* To use the IO Ports Registers */
+#include <avr/interrupt.h>
+
+ADC_ConfigType ADC_Configurations = {};
+
+void ADC_init(const ADC_ConfigType * Config_Ptr){
+
+	ADC_Configurations.prescaler = Config_Ptr->prescaler;
+	ADC_Configurations.ref_volt  = Config_Ptr->ref_volt;
+
+	ADMUX = (1<<REFS0) | (1<<REFS1);
+
+	ADCSRA = (1<<ADEN) | (1<<ADIE) | (1<<ADPS1) | (1<<ADPS0);
+
+}
+
+uint16 ADC_readChannel(uint8 ch_num){
+
+	ADMUX = (ADMUX & 0xE0)|(ch_num & 0x1F);
+
+	SET_BIT(ADCSRA , ADSC);
+
+}

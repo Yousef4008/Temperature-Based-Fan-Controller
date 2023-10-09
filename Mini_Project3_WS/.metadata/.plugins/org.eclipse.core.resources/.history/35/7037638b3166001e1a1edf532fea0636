@@ -1,0 +1,27 @@
+/*
+ * l293d.h
+ *
+ *  Created on: Oct 9, 2023
+ *      Author: Youssif Hossam
+ */
+
+#ifndef HAL_L293D_L293D_H_
+#define HAL_L293D_L293D_H_
+
+#include "../../LIB/std_types.h"
+
+#define L293D_IN0_PORT_ID
+#define L293D_IN1_PORT_ID
+#define L293D_EN1_PORT_ID
+#define L293D_IN3_PORT_ID
+#define L293D_IN4_PORT_ID
+#define L293D_EN2_PORT_ID
+typedef enum {
+	OFF , CW , A_CW
+}DcMotor_State;
+
+void DcMotor_Init(void);
+
+void DcMotor_Rotate(DcMotor_State state,uint8 speed);
+
+#endif /* HAL_L293D_L293D_H_ */

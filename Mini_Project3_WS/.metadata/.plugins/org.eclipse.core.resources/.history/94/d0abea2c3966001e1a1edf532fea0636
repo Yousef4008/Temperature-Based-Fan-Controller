@@ -1,0 +1,82 @@
+/*
+ * l293d.c
+ *
+ *  Created on: Oct 9, 2023
+ *      Author: Youssif Hossam
+ */
+
+#include "l293d.h"
+#include "../../MCAL/GPIO/gpio.h"
+#include <avr/io.h>
+
+
+
+void L293D_Init(L293D_ChannelMode ChannelMode){
+	switch(ChannelMode){
+	case CHANNEL1_MODE:
+		GPIO_setupPinDirection(L293D_IN1_PORT_ID , L293D_IN1_PIN_ID , PIN_OUTPUT);
+		GPIO_setupPinDirection(L293D_IN2_PORT_ID , L293D_IN2_PIN_ID , PIN_OUTPUT);
+		GPIO_writePin(L293D_IN1_PORT_ID , L293D_IN1_PIN_ID , LOGIC_LOW);
+		GPIO_writePin(L293D_IN2_PORT_ID , L293D_IN2_PIN_ID , LOGIC_LOW);
+		break;
+	case CHANNEL2_MODE:
+		GPIO_setupPinDirection(L293D_IN3_PORT_ID , L293D_IN3_PIN_ID , PIN_OUTPUT);
+		GPIO_setupPinDirection(L293D_IN4_PORT_ID , L293D_IN4_PIN_ID , PIN_OUTPUT);
+		GPIO_writePin(L293D_IN3_PORT_ID , L293D_IN3_PIN_ID , LOGIC_LOW);
+		GPIO_writePin(L293D_IN4_PORT_ID , L293D_IN4_PIN_ID , LOGIC_LOW);
+
+		break;
+	case DUAL_CHANNEL_MODE:
+		GPIO_setupPinDirection(L293D_IN1_PORT_ID , L293D_IN1_PIN_ID , PIN_OUTPUT);
+		GPIO_setupPinDirection(L293D_IN2_PORT_ID , L293D_IN2_PIN_ID , PIN_OUTPUT);
+		GPIO_setupPinDirection(L293D_IN3_PORT_ID , L293D_IN3_PIN_ID , PIN_OUTPUT);
+		GPIO_setupPinDirection(L293D_IN4_PORT_ID , L293D_IN4_PIN_ID , PIN_OUTPUT);
+
+		GPIO_writePin(L293D_IN1_PORT_ID , L293D_IN1_PIN_ID , LOGIC_LOW);
+		GPIO_writePin(L293D_IN2_PORT_ID , L293D_IN2_PIN_ID , LOGIC_LOW);
+		GPIO_writePin(L293D_IN3_PORT_ID , L293D_IN3_PIN_ID , LOGIC_LOW);
+		GPIO_writePin(L293D_IN4_PORT_ID , L293D_IN4_PIN_ID , LOGIC_LOW);
+		break;
+	}
+
+}
+
+void L293D_Rotate(uint8 Channel , DcMotor_State state,uint8 speed){
+
+	Timer0_PWM_Init(Channel , speed);
+	switch(Channel){
+	case 1:
+		switch(state){
+		case OFF:
+			GPIO_writePin(L293D_IN1_PORT_ID,L293D_IN1_PIN_ID,LOGIC_LOW);
+			GPIO_writePin(L293D_IN2_PORT_ID,L293D_IN2_PIN_ID,LOGIC_LOW);
+			break;
+		case CW:
+			GPIO_writePin(L293D_IN1_PORT_ID,L293D_IN1_PIN_ID,LOGIC_HIGH);
+			GPIO_writePin(L293D_IN2_PORT_ID,L293D_IN2_PIN_ID,LOGIC_LOW);
+			break;
+		case A_CW:
+			GPIO_writePin(L293D_IN1_PORT_ID,L293D_IN1_PIN_ID,LOGIC_LOW);
+			GPIO_writePin(L293D_IN2_PORT_ID,L293D_IN2_PIN_ID,LOGIC_HIGH);
+			break;
+		}
+		break;
+		case 2:
+			switch(state){
+			case OFF:
+				GPIO_writePin(L293D_IN3_PORT_ID,L293D_IN3_PIN_ID,LOGIC_LOW);
+				GPIO_writePin(L293D_IN4_PORT_ID,L293D_IN4_PIN_ID,LOGIC_LOW);
+				break;
+			case CW:
+				GPIO_writePin(L293D_IN3_PORT_ID,L293D_IN3_PIN_ID,LOGIC_HIGH);
+				GPIO_writePin(L293D_IN4_PORT_ID,L293D_IN4_PIN_ID,LOGIC_LOW);
+				break;
+			case A_CW:
+				GPIO_writePin(L293D_IN3_PORT_ID,L293D_IN3_PIN_ID,LOGIC_LOW);
+				GPIO_writePin(L293D_IN4_PORT_ID,L293D_IN4_PIN_ID,LOGIC_HIGH);
+				break;
+			}
+			break;
+	}
+}
+

@@ -1,0 +1,49 @@
+/*
+ * app.c
+ *
+ *  Created on: Oct 8, 2023
+ *      Author: Youssif Hossam
+ */
+
+
+#include "HAL/LCD/lcd.h"
+#include "HAL/LM35_SENSOR/lm35_sensor.h"
+#include "HAL/L293D/l293d.h"
+#include "MCAL/ADC/adc.h"
+#include "LIB/std_types.h"
+
+int main (void){
+
+	L293D_Init(CHANNEL1_MODE );
+
+	uint8 tempetaure = 0 , speed = 0;
+	LCD_init();
+
+	ADC_ConfigType ADC_MyConfiguration = {Int_2_56V , PRESCALER_8};
+	ADC_init(&ADC_MyConfiguration);
+	LCD_moveCursor(0,4);
+	LCD_displayString("Temp	= ");
+	LCD_moveCursor(1,4);
+	LCD_displayString("FAN is ");
+
+	while(1){
+
+		tempetaure = LM35_getTemperature();
+		if(tempetaure < 30)
+			speed = 0;
+		else if (tempetaure < 60)
+			speed = 25;
+		else if (tempetaure < 90)
+			speed = 50;
+
+		LCD_moveCursor(0,11);
+		LCD_intgerToString(tempetaure);
+		if(tempetaure < 10)
+			LCD_displayString("  ");
+		else if(tempetaure < 100)
+			LCD_displayString(" ");
+
+		LCD_displayCharacter('C');
+	}
+	return 0;
+}

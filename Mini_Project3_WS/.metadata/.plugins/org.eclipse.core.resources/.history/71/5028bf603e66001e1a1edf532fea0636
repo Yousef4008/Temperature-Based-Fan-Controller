@@ -1,0 +1,50 @@
+/*	______________________________________________________________________________
+   |																			  |
+   | Module: ADC																  |
+   |																			  |
+   | File Name: adc.h															  |
+   |																			  |
+   | Description: Source file for the ATmega16 ADC driver							  |
+   |																			  |
+   | Author: Youssif Hossam														  |
+   |______________________________________________________________________________|
+*/
+#include "adc.h"
+#include "../../LIB/common_macros.h" /* To use the macros like SET_BIT */
+#include <avr/io.h> /* To use the IO Ports Registers */
+#include <util/delay.h>
+
+float32 ADC_RefVoltValue;
+
+void ADC_init(const ADC_ConfigType * Config_Ptr){
+
+	switch(Config_Ptr->ref_volt){
+	case 1:
+		ADC_RefVoltValue = 5;
+		break;
+
+	case 3:
+		ADC_RefVoltValue = 2.56;
+		break;
+	}
+
+	ADMUX = (ADMUX & 0x3F) | ((Config_Ptr->ref_volt)<<6);
+
+	ADCSRA = (1<<ADEN) ;
+
+	ADCSRA = (ADCSRA & 0xF8) | (Config_Ptr->prescaler);
+
+}
+
+uint16 ADC_readChannel(uint8 ch_num){
+
+	ADMUX = (ADMUX & 0xE0)|(ch_num & 0x1F);
+
+	SET_BIT(ADCSRA , ADSC);
+
+	while(BIT_IS_CLEAR(ADCSRA,ADIF));
+
+	SET_BIT(ADCSRA,ADIF);
+
+	return ADC;
+}

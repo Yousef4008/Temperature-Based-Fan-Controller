@@ -1,0 +1,20 @@
+/*
+ * sensor.h
+ *
+ *  Created on: Oct 6, 2023
+ *      Author: Youssif Hossam
+ */
+
+#ifndef MCAL_SENSOR_SENSOR_H_
+#define MCAL_SENSOR_SENSOR_H_
+
+#include "../../LIB/std_types.h"
+#include "../../LIB/common_macros.h"
+
+#define SENSOR_CHANNEL_ID         PIN2_ID
+#define SENSOR_MAX_VOLT_VALUE     1.5
+#define SENSOR_MAX_TEMPERATURE    150
+
+uint8 LM35_getTemperature(void);
+
+#endif /* MCAL_SENSOR_SENSOR_H_ */
